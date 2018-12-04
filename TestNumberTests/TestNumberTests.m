@@ -239,7 +239,7 @@
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     formatter.numberStyle = NSNumberFormatterDecimalStyle;
         formatter.maximumFractionDigits = 1; // 最多 保留一位
-    formatter.roundingMode = NSNumberFormatterRoundCeiling; // 四舍五入
+    formatter.roundingMode = NSNumberFormatterRoundCeiling; // 向上取整
     
     
     NSString *str = [formatter stringFromNumber:number];
@@ -285,7 +285,7 @@
      2018-12-03 14:57:38.492277+0800 TestNumber[24377:195755] testRoundFloor -- 1.1
      */
 }
-// 向上取整
+// 向下取整
 - (NSString *)roundFloorString:(NSString *)s
 {
     NSNumber *number = [self string2Number:s];
@@ -293,7 +293,7 @@
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     formatter.numberStyle = NSNumberFormatterDecimalStyle;
     formatter.maximumFractionDigits = 1; // 最多 保留一位
-    formatter.roundingMode = NSNumberFormatterRoundFloor; // 四舍五入
+    formatter.roundingMode = NSNumberFormatterRoundFloor; // 向下取整
     
     
     NSString *str = [formatter stringFromNumber:number];
@@ -731,7 +731,7 @@
      */
 }
 
-// 保留一位小数
+// 保留三位小数
 - (NSString *)remainThreePointString:(NSString *)s
 {
     NSString *string = [NSString stringWithFormat:@"%.3f", [s floatValue]];
@@ -745,8 +745,238 @@
 - (NSString *)remainThreePointNumber1:(NSNumber *)number
 {
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-    formatter.maximumFractionDigits = 3; // 保留一位小数
+    formatter.maximumFractionDigits = 3; // 保留三位小数
     return [formatter stringFromNumber:number];
+}
+
+
+#pragma mark - 向下取整 误差
+// 向下取整 误差
+- (void)testSub1
+{
+    NSString *s10 = @"1.90";
+    NSString *s11 = @"1.91";
+    NSString *s12 = @"1.92";
+    NSString *s13 = @"1.93";
+    NSString *s14 = @"1.94";
+    NSString *s15 = @"1.95";
+    NSString *s16 = @"1.96";
+    NSString *s17 = @"1.97";
+    NSString *s18 = @"1.98";
+    NSString *s19 = @"1.99";
+    
+    NSLog(@"testSub1 -- %@", [self roundFloorString:s10]);
+    NSLog(@"testSub1 -- %@", [self roundFloorString:s11]);
+    NSLog(@"testSub1 -- %@", [self roundFloorString:s12]);
+    NSLog(@"testSub1 -- %@", [self roundFloorString:s13]);
+    NSLog(@"testSub1 -- %@", [self roundFloorString:s14]);
+    NSLog(@"testSub1 -- %@", [self roundFloorString:s15]);
+    NSLog(@"testSub1 -- %@", [self roundFloorString:s16]);
+    NSLog(@"testSub1 -- %@", [self roundFloorString:s17]);
+    NSLog(@"testSub1 -- %@", [self roundFloorString:s18]);
+    NSLog(@"testSub1 -- %@", [self roundFloorString:s19]);
+    
+    // 打印日志
+    /*
+     2018-12-04 15:07:44.562198+0800 TestNumber[19420:652098] testSub1 -- 1.8
+     2018-12-04 15:07:44.562486+0800 TestNumber[19420:652098] testSub1 -- 1.9
+     2018-12-04 15:07:44.562767+0800 TestNumber[19420:652098] testSub1 -- 1.9
+     2018-12-04 15:07:44.562979+0800 TestNumber[19420:652098] testSub1 -- 1.9
+     2018-12-04 15:07:44.563183+0800 TestNumber[19420:652098] testSub1 -- 1.9
+     2018-12-04 15:07:44.563377+0800 TestNumber[19420:652098] testSub1 -- 1.9
+     2018-12-04 15:07:44.563575+0800 TestNumber[19420:652098] testSub1 -- 1.9
+     2018-12-04 15:07:44.563790+0800 TestNumber[19420:652098] testSub1 -- 1.9
+     2018-12-04 15:07:44.563983+0800 TestNumber[19420:652098] testSub1 -- 1.9
+     2018-12-04 15:07:44.564181+0800 TestNumber[19420:652098] testSub1 -- 1.9
+     */
+}
+
+// 向下取整 修正
+- (void)testSub2
+{
+    NSString *s10 = @"1.90";
+    NSString *s11 = @"1.91";
+    NSString *s12 = @"1.92";
+    NSString *s13 = @"1.93";
+    NSString *s14 = @"1.94";
+    NSString *s15 = @"1.95";
+    NSString *s16 = @"1.96";
+    NSString *s17 = @"1.97";
+    NSString *s18 = @"1.98";
+    NSString *s19 = @"1.99";
+    
+    NSLog(@"testSub2 -- %@", [self roundFloorString1:s10]);
+    NSLog(@"testSub2 -- %@", [self roundFloorString1:s11]);
+    NSLog(@"testSub2 -- %@", [self roundFloorString1:s12]);
+    NSLog(@"testSub2 -- %@", [self roundFloorString1:s13]);
+    NSLog(@"testSub2 -- %@", [self roundFloorString1:s14]);
+    NSLog(@"testSub2 -- %@", [self roundFloorString1:s15]);
+    NSLog(@"testSub2 -- %@", [self roundFloorString1:s16]);
+    NSLog(@"testSub2 -- %@", [self roundFloorString1:s17]);
+    NSLog(@"testSub2 -- %@", [self roundFloorString1:s18]);
+    NSLog(@"testSub2 -- %@", [self roundFloorString1:s19]);
+    
+    // 打印日志
+    /*
+     2018-12-04 15:09:05.571962+0800 TestNumber[19482:653134] testSub2 -- 1.9
+     2018-12-04 15:09:05.572267+0800 TestNumber[19482:653134] testSub2 -- 1.9
+     2018-12-04 15:09:05.572495+0800 TestNumber[19482:653134] testSub2 -- 1.9
+     2018-12-04 15:09:05.572704+0800 TestNumber[19482:653134] testSub2 -- 1.9
+     2018-12-04 15:09:05.572970+0800 TestNumber[19482:653134] testSub2 -- 1.9
+     2018-12-04 15:09:05.573229+0800 TestNumber[19482:653134] testSub2 -- 1.9
+     2018-12-04 15:09:05.573624+0800 TestNumber[19482:653134] testSub2 -- 1.9
+     2018-12-04 15:09:05.573864+0800 TestNumber[19482:653134] testSub2 -- 1.9
+     2018-12-04 15:09:05.574131+0800 TestNumber[19482:653134] testSub2 -- 1.9
+     2018-12-04 15:09:05.574468+0800 TestNumber[19482:653134] testSub2 -- 1.9
+     */
+}
+
+// 向下取整 修正
+- (NSString *)roundFloorString1:(NSString *)s
+{
+    NSNumber *number = [self string2Number:s];
+    
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+    formatter.numberStyle = NSNumberFormatterDecimalStyle;
+    formatter.maximumFractionDigits = 1; // 最多 保留一位
+    formatter.roundingMode = NSNumberFormatterRoundFloor; // 向下取整
+    
+    
+    NSString *str = [formatter stringFromNumber:@([number floatValue] + 0.000001)]; // 消除误差
+    return str;
+}
+
+// 向下取整 计算过程出现误差
+- (void)testSub3
+{
+    NSString *s10 = @"1.90";
+    NSString *s11 = @"1.91";
+    NSString *s12 = @"1.92";
+    NSString *s13 = @"1.93";
+    NSString *s14 = @"1.94";
+    NSString *s15 = @"1.95";
+    NSString *s16 = @"1.96";
+    NSString *s17 = @"1.97";
+    NSString *s18 = @"1.98";
+    NSString *s19 = @"1.99";
+    
+    NSLog(@"testSub3 -- %@", [self roundFloorFloat:[s10 floatValue]]);
+    NSLog(@"testSub3 -- %@", [self roundFloorFloat:[s11 floatValue]]);
+    NSLog(@"testSub3 -- %@", [self roundFloorFloat:[s12 floatValue]]);
+    NSLog(@"testSub3 -- %@", [self roundFloorFloat:[s13 floatValue]]);
+    NSLog(@"testSub3 -- %@", [self roundFloorFloat:[s14 floatValue]]);
+    NSLog(@"testSub3 -- %@", [self roundFloorFloat:[s15 floatValue]]);
+    NSLog(@"testSub3 -- %@", [self roundFloorFloat:[s16 floatValue]]);
+    NSLog(@"testSub3 -- %@", [self roundFloorFloat:[s17 floatValue]]);
+    NSLog(@"testSub3 -- %@", [self roundFloorFloat:[s18 floatValue]]);
+    NSLog(@"testSub3 -- %@", [self roundFloorFloat:[s19 floatValue]]);
+    
+    // 打印日志
+    /*
+     2018-12-04 15:25:59.925060+0800 TestNumber[20129:663532] ssss -- 1.399999976158142
+     2018-12-04 15:25:59.925369+0800 TestNumber[20129:663532] testSub3 -- 1.3
+     2018-12-04 15:25:59.925503+0800 TestNumber[20129:663532] ssss -- 1.409999966621399
+     2018-12-04 15:25:59.925691+0800 TestNumber[20129:663532] testSub3 -- 1.4
+     2018-12-04 15:25:59.925799+0800 TestNumber[20129:663532] ssss -- 1.419999957084656
+     2018-12-04 15:25:59.925966+0800 TestNumber[20129:663532] testSub3 -- 1.4
+     2018-12-04 15:25:59.926086+0800 TestNumber[20129:663532] ssss -- 1.429999947547913
+     2018-12-04 15:25:59.926270+0800 TestNumber[20129:663532] testSub3 -- 1.4
+     2018-12-04 15:25:59.926394+0800 TestNumber[20129:663532] ssss -- 1.440000057220459
+     2018-12-04 15:25:59.926572+0800 TestNumber[20129:663532] testSub3 -- 1.4
+     2018-12-04 15:25:59.926687+0800 TestNumber[20129:663532] ssss -- 1.450000047683716
+     2018-12-04 15:25:59.926860+0800 TestNumber[20129:663532] testSub3 -- 1.4
+     2018-12-04 15:25:59.932725+0800 TestNumber[20129:663532] ssss -- 1.460000038146973
+     2018-12-04 15:25:59.932947+0800 TestNumber[20129:663532] testSub3 -- 1.4
+     2018-12-04 15:25:59.933071+0800 TestNumber[20129:663532] ssss -- 1.470000028610229
+     2018-12-04 15:25:59.933235+0800 TestNumber[20129:663532] testSub3 -- 1.4
+     2018-12-04 15:25:59.933344+0800 TestNumber[20129:663532] ssss -- 1.480000019073486
+     2018-12-04 15:25:59.933508+0800 TestNumber[20129:663532] testSub3 -- 1.4
+     2018-12-04 15:25:59.933608+0800 TestNumber[20129:663532] ssss -- 1.490000009536743
+     2018-12-04 15:25:59.933814+0800 TestNumber[20129:663532] testSub3 -- 1.4
+     */
+}
+
+// 向下取整
+- (NSString *)roundFloorFloat:(CGFloat)f
+{
+    CGFloat sub = 0.5;
+    NSNumber *number =  @(f - sub); // 做个计算，出现误差
+    NSLog(@"ssss -- %@", number);
+    
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+    formatter.numberStyle = NSNumberFormatterDecimalStyle;
+    formatter.maximumFractionDigits = 1; // 最多 保留一位
+    formatter.roundingMode = NSNumberFormatterRoundFloor; // 向下取整
+    
+    NSString *str = [formatter stringFromNumber:@([number floatValue])];
+    return str;
+}
+
+// 向下取整 计算过程出现误差 修正
+- (void)testSub4
+{
+    NSString *s10 = @"1.90";
+    NSString *s11 = @"1.91";
+    NSString *s12 = @"1.92";
+    NSString *s13 = @"1.93";
+    NSString *s14 = @"1.94";
+    NSString *s15 = @"1.95";
+    NSString *s16 = @"1.96";
+    NSString *s17 = @"1.97";
+    NSString *s18 = @"1.98";
+    NSString *s19 = @"1.99";
+    
+    NSLog(@"testSub4 -- %@", [self roundFloorFloat1:[s10 floatValue]]);
+    NSLog(@"testSub4 -- %@", [self roundFloorFloat1:[s11 floatValue]]);
+    NSLog(@"testSub4 -- %@", [self roundFloorFloat1:[s12 floatValue]]);
+    NSLog(@"testSub4 -- %@", [self roundFloorFloat1:[s13 floatValue]]);
+    NSLog(@"testSub4 -- %@", [self roundFloorFloat1:[s14 floatValue]]);
+    NSLog(@"testSub4 -- %@", [self roundFloorFloat1:[s15 floatValue]]);
+    NSLog(@"testSub4 -- %@", [self roundFloorFloat1:[s16 floatValue]]);
+    NSLog(@"testSub4 -- %@", [self roundFloorFloat1:[s17 floatValue]]);
+    NSLog(@"testSub4 -- %@", [self roundFloorFloat1:[s18 floatValue]]);
+    NSLog(@"testSub4 -- %@", [self roundFloorFloat1:[s19 floatValue]]);
+    
+    // 打印日志
+    /*
+     2018-12-04 15:28:24.076919+0800 TestNumber[20228:665143] ssss -- 1.399999976158142
+     2018-12-04 15:28:24.077252+0800 TestNumber[20228:665143] testSub4 -- 1.4
+     2018-12-04 15:28:24.077396+0800 TestNumber[20228:665143] ssss -- 1.409999966621399
+     2018-12-04 15:28:24.077580+0800 TestNumber[20228:665143] testSub4 -- 1.4
+     2018-12-04 15:28:24.077684+0800 TestNumber[20228:665143] ssss -- 1.419999957084656
+     2018-12-04 15:28:24.077852+0800 TestNumber[20228:665143] testSub4 -- 1.4
+     2018-12-04 15:28:24.077943+0800 TestNumber[20228:665143] ssss -- 1.429999947547913
+     2018-12-04 15:28:24.078108+0800 TestNumber[20228:665143] testSub4 -- 1.4
+     2018-12-04 15:28:24.078353+0800 TestNumber[20228:665143] ssss -- 1.440000057220459
+     2018-12-04 15:28:24.078895+0800 TestNumber[20228:665143] testSub4 -- 1.4
+     2018-12-04 15:28:24.079059+0800 TestNumber[20228:665143] ssss -- 1.450000047683716
+     2018-12-04 15:28:24.079513+0800 TestNumber[20228:665143] testSub4 -- 1.4
+     2018-12-04 15:28:24.079847+0800 TestNumber[20228:665143] ssss -- 1.460000038146973
+     2018-12-04 15:28:24.080295+0800 TestNumber[20228:665143] testSub4 -- 1.4
+     2018-12-04 15:28:24.080660+0800 TestNumber[20228:665143] ssss -- 1.470000028610229
+     2018-12-04 15:28:24.081062+0800 TestNumber[20228:665143] testSub4 -- 1.4
+     2018-12-04 15:28:24.081191+0800 TestNumber[20228:665143] ssss -- 1.480000019073486
+     2018-12-04 15:28:24.081611+0800 TestNumber[20228:665143] testSub4 -- 1.4
+     2018-12-04 15:28:24.081957+0800 TestNumber[20228:665143] ssss -- 1.490000009536743
+     2018-12-04 15:28:24.082355+0800 TestNumber[20228:665143] testSub4 -- 1.4
+     */
+}
+
+// 向下取整
+- (NSString *)roundFloorFloat1:(CGFloat)f
+{
+    CGFloat sub = 0.5;
+    NSNumber *number =  @(f - sub); // 做个计算，出现误差
+    NSLog(@"ssss -- %@", number);
+    
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+    formatter.numberStyle = NSNumberFormatterDecimalStyle;
+    formatter.maximumFractionDigits = 1; // 最多 保留一位
+    formatter.roundingMode = NSNumberFormatterRoundFloor; // 向下取整
+    
+    
+    NSString *str = [formatter stringFromNumber:@([number floatValue] + 0.000001)]; // 消除误差
+    return str;
 }
 
 @end
